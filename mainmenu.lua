@@ -17,7 +17,7 @@ local btnPlay
 
 local function jogar( event )
 	btnPlay:removeEventListener( "tap", jogar )
-	composer.gotoScene( "game", "fade", 500 )  
+	composer.gotoScene( "escolher", "fade", 500 )  
 end
 
 
@@ -35,6 +35,8 @@ function scene:show( event )
 
     if phase == "will" then
     	btnPlay = Botao.new("Play", 20)
+    	title = display.newText( "IMPEACHOMETRO", display.contentCenterX, display.contentHeight / 25 * 2.5, native.systemFontBold, 40)
+    	title:setFillColor( 0,0,0 )
        
         
 
@@ -45,6 +47,7 @@ function scene:show( event )
         end
         btnPlay:addEventListener( "tap", jogar )
         sceneGroup:insert( btnPlay )
+        sceneGroup:insert( title )
 
     end 
 end

@@ -14,6 +14,11 @@ local Botao = require( "Botao" )
 local scene = composer.newScene(  )
 
 local btnPlay
+local ficaDilma
+local foraDilma
+local txtFica
+local txtFora
+local txtPergunta
 
 local function jogar( event )
 	btnPlay:removeEventListener( "tap", jogar )
@@ -34,7 +39,26 @@ function scene:show( event )
     local phase = event.phase
 
     if phase == "will" then
-    	btnPlay = Botao.new("Play", 20)
+    	btnPlay = Botao.new("Play", 80)
+
+    	txtFica = display.newText( "De que lado você está?", display.contentCenterX, display.contentHeight/100*20, native.systemFontBold, 40)
+
+
+    	ficaDilma = display.newImage( "dilma.png" )
+        ficaDilma:scale( 0.16, 0.16)
+        ficaDilma.x = display.contentCenterX + display.contentCenterX/2
+        ficaDilma.y = display.contentCenterY/1.1
+
+        txtFica = display.newText( "#Fica", ficaDilma.x, ficaDilma.y + 150, native.systemFontBold, 40)
+        txtFica:setFillColor( 0,0,0 )
+
+        foraDilma = display.newImage( "foradilma.png" )
+        foraDilma:scale( 0.8, 0.8)
+        foraDilma.x = display.contentCenterX/2
+        foraDilma.y = display.contentCenterY/1.1
+
+        txtFora = display.newText( "#Fora", foraDilma.x, foraDilma.y + 150, native.systemFontBold, 40)
+        txtFora:setFillColor( 0,0,0 )
        
         
 
@@ -45,6 +69,10 @@ function scene:show( event )
         end
         btnPlay:addEventListener( "tap", jogar )
         sceneGroup:insert( btnPlay )
+        sceneGroup:insert( ficaDilma )
+        sceneGroup:insert( txtFica )
+        sceneGroup:insert( foraDilma )
+        sceneGroup:insert( txtFora )
 
     end 
 end
