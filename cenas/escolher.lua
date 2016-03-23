@@ -7,7 +7,7 @@
 local sceneName = ...
 
 local composer = require( "composer" )
-local Botao = require( "Botao" )
+local Botao = require( "objetos.Botao" )
 
 
 -- Load scene with same root filename as this file
@@ -22,7 +22,33 @@ local txtPergunta
 
 local function jogar( event )
 	btnPlay:removeEventListener( "tap", jogar )
-	composer.gotoScene( "game", "fade", 500 )  
+	composer.gotoScene( "cenas.game", "fade", 500 )  
+end
+
+local function fica( event )
+	ficaDilma:removeEventListener( "tap", fica )
+	print( "fica" )
+	transition.to( foraDilma, {alpha=0, time=200} )
+	transition.to( txtFica, {alpha=0, time=200} )
+	transition.to( txtFora, {alpha=0, time=200} )
+	transition.to( txtPergunta, {alpha=0, time=200} )
+	transition.to( ficaDilma, {x=display.contentCenterX, y=display.contentCenterY, xScale=1, yScale=1, alpha=0, time=500,onComplete=function (  )
+		composer.gotoScene( "cenas.game", { effect = "fade", time = 500, params={lado="fica" } } )
+	end} )
+
+end
+
+local function fora( event )
+    foraDilma:removeEventListener( "tap", fora )
+	print( "fora" )
+	transition.to( ficaDilma, {alpha=0, time=200} )
+	transition.to( txtFica, {alpha=0, time=200} )
+	transition.to( txtFora, {alpha=0, time=200} )
+	transition.to( txtPergunta, {alpha=0, time=200} )
+	transition.to( foraDilma, {x=display.contentCenterX, y=display.contentCenterY, xScale=5, yScale=5, alpha=0, time=500,onComplete=function (  )
+		composer.gotoScene( "cenas.game", { effect = "fade", time = 500, params={lado="fora" } } )
+	end} )
+	
 end
 
 
@@ -39,12 +65,12 @@ function scene:show( event )
     local phase = event.phase
 
     if phase == "will" then
-    	btnPlay = Botao.new("Play", 80)
+    	
+    	txtPergunta = display.newText( "Escolha seu lado", display.contentCenterX, display.contentHeight/100*20, native.systemFontBold, 40)
+    	txtPergunta:setFillColor( 0,0,0 )
 
-    	txtFica = display.newText( "De que lado você está?", display.contentCenterX, display.contentHeight/100*20, native.systemFontBold, 40)
 
-
-    	ficaDilma = display.newImage( "dilma.png" )
+    	ficaDilma = display.newImage( "imagens/dilma.png" )
         ficaDilma:scale( 0.16, 0.16)
         ficaDilma.x = display.contentCenterX + display.contentCenterX/2
         ficaDilma.y = display.contentCenterY/1.1
@@ -52,14 +78,14 @@ function scene:show( event )
         txtFica = display.newText( "#Fica", ficaDilma.x, ficaDilma.y + 150, native.systemFontBold, 40)
         txtFica:setFillColor( 0,0,0 )
 
-        foraDilma = display.newImage( "foradilma.png" )
+        foraDilma = display.newImage( "imagens/foradilma.png" )
         foraDilma:scale( 0.8, 0.8)
         foraDilma.x = display.contentCenterX/2
         foraDilma.y = display.contentCenterY/1.1
 
         txtFora = display.newText( "#Fora", foraDilma.x, foraDilma.y + 150, native.systemFontBold, 40)
         txtFora:setFillColor( 0,0,0 )
-       
+
         
 
     elseif phase == "did" then
@@ -67,8 +93,11 @@ function scene:show( event )
         if (prevScene) then
             composer.removeScene( prevScene )
         end
-        btnPlay:addEventListener( "tap", jogar )
-        sceneGroup:insert( btnPlay )
+        
+        ficaDilma:addEventListener( "tap", fica )
+        foraDilma:addEventListener( "tap", fora )
+               
+        sceneGroup:insert( txtPergunta )
         sceneGroup:insert( ficaDilma )
         sceneGroup:insert( txtFica )
         sceneGroup:insert( foraDilma )

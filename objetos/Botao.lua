@@ -1,6 +1,6 @@
 local widget = require( "widget" )
 
-function new( texto,y )
+local function new( texto,y )
 	local options = {
 		x=display.contentCenterX,
 		y=display.contentHeight / 100 * y,
@@ -26,7 +26,7 @@ function new( texto,y )
 	return botao
 end
 
-function newFacebook( texto,y )
+local function newFacebook( texto,y )
 	local options = {
 		x=display.contentCenterX,
 		y=display.contentHeight / 100 * y,

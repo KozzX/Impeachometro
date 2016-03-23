@@ -37,7 +37,7 @@ OneSignal.Init("241065a8-da68-4c69-af71-988c0c080ef3", "186553540640", DidReceiv
 
 local composer = require( "composer" )
 
-composer.gotoScene( "mainmenu", "crossFade", 500 )  
+composer.gotoScene( "cenas.mainmenu", "crossFade", 500 )  
 
 display.setDefault( "background", 0.8,0.8,0.8 )
 

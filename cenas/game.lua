@@ -7,36 +7,85 @@
 local sceneName = ...
 
 local composer = require( "composer" )
-local Botao = require( "Botao" )
+local Botao = require( "objetos.Botao" )
+local Objetos = require( "objetos.Objetos" )
+local Mensagem = require ("objetos.Mensagem")
+local Resultado = require ("objetos.Resultado")
 
 
+local title
+local fase
+local numFase = 1
+local pontos
 local dilma
 local roda
 local ponteiro
-local btnHit
+local btnOk
 local angulo = 0
 local maxRot = 90
 local minRot = -90
 local metaSpeed = -0.5
 local actSpeed = metaSpeed
 local ativo = true
+local btnProx
+
+local hit
+local listener
+
+
 
 
 -- Load scene with same root filename as this file
 local scene = composer.newScene(  )
 
+local function proximo( event )
+	btnProx:removeEventListener( "tap", proximo )
+	display.remove( btnProx )
+	transition.to( ponteiro, {rotation=0, time=200} )
+	Resultado.remover()
 
-local function listener( event )
+	timer.performWithDelay( 1500, function (  )
+		fase.text = "Fase" .. numFase
+		metaSpeed = metaSpeed - 0.5
+		ativo = true
+		Runtime:addEventListener( "tap", hit )
+		Runtime:addEventListener( "enterFrame", listener )
+	end , 1 )
+	
+end
+
+
+local function vitoria(  )
+	print( "vitoria" )
+	numFase = numFase + 1
+	Resultado.new(fase.text)
+	timer.performWithDelay( 1000, function (  )
+		btnProx = Botao.new("Ir para Fase "..numFase, 60)
+		btnProx:addEventListener( "tap", proximo )		
+	end , 1 )
+	
+	
+end
+
+local function derrota(  )
+	print( "derrota" )
+	
+end
+
+
+function listener( event )
     ponteiro:rotate( actSpeed )
 
     if (ponteiro.rotation <= minRot) then
         actSpeed = 0
         ativo = false
         Runtime:removeEventListener( "enterFrame", listener )
+        derrota()
     elseif (ponteiro.rotation >= maxRot) then
         actSpeed = 0
         ativo = false
         Runtime:removeEventListener( "enterFrame", listener )
+        vitoria()
     end
 end 
 
@@ -47,14 +96,27 @@ local function infla(  )
     end} )
 end
 
-local function hit( event )
+function hit( event )
     actSpeed = (metaSpeed*(-1))+1
     timer.performWithDelay( 50, function (  )
         actSpeed = metaSpeed
         if (ativo == true) then
+        	pontos.text = pontos.text + (1)
+        	Mensagem.newPlusOne()
             infla()  
         end
     end ,1 )
+end
+
+local function comecar( event )
+	display.remove(btnOk)
+	btnOk:removeEventListener( "tap", comecar )
+	Mensagem.remover()
+	timer.performWithDelay( 500, function (  )
+		Runtime:addEventListener( "tap", hit )
+		Runtime:addEventListener( "enterFrame", listener )	
+	end ,1 )
+	
 end
 
 -------------------------------------------------------------------------------------------
@@ -67,28 +129,22 @@ end
 function scene:show( event )
     local sceneGroup = self.view
     local phase = event.phase
+    local extras = event.params
 
 
     if phase == "will" then
-        dilma = display.newImage( "dilma.png" )
-        dilma:scale( 0.35, 0.35)
-        dilma.x = display.contentCenterX
-        dilma.y = display.contentCenterY/1.1
-
-        roda = display.newImage( "dashmeterinverse.png" )
-        roda.x = display.contentCenterX
-        roda.y = display.contentHeight-100
-        roda.anchorY = 1
-        roda.width = display.contentWidth
-        roda.height = display.contentCenterY*0.5
-        roda.alpha = 0.8
-
-        ponteiro = display.newRect( display.contentCenterX, display.contentHeight-100, 5 , display.contentWidth/2.5)
-        ponteiro:setFillColor( 0,0,0 )
-        ponteiro.anchorY = 1
-        ponteiro:rotate( 0 )
-
-        btnHit = Botao.new("Hit", 92)
+    	if (extras.lado == "fica") then
+    		title = display.newText( "#Fica", display.contentCenterX, display.contentHeight/100*5, native.systemFontBold, 40)
+    		
+    	elseif (extras.lado == "fora") then
+    		title = display.newText( "#Fora", display.contentCenterX, display.contentHeight/100*5, native.systemFontBold, 40)
+    	end
+    	title:setFillColor( 0,0,0 )
+    	fase = display.newText( "Fase "..numFase, display.contentCenterX, display.contentHeight/100*10, native.systemFontBold, 40)
+    	fase:setFillColor( 0,0,0 )
+    	pontos = display.newText( "0", display.contentCenterX, display.contentHeight/100*15, native.systemFontBold, 40)
+    	pontos:setFillColor( 0,0,0 )
+    	pontos.text = 0
         
 
     elseif phase == "did" then
@@ -96,14 +152,20 @@ function scene:show( event )
         if (prevScene) then
             composer.removeScene( prevScene )
         end
+        dilma = Objetos.newDilma()
+        roda = Objetos.newDash()
+        ponteiro = Objetos.newPonteiro()
+        msg = Mensagem.new(extras.lado)
+        btnOk = Botao.new("Começar", 60)
 
-        btnHit:addEventListener( "tap", hit )
-        Runtime:addEventListener( "enterFrame", listener )
+        btnOk:addEventListener( "tap", comecar )
+        
 
         sceneGroup:insert( dilma )
         sceneGroup:insert( roda )
         sceneGroup:insert( ponteiro )
-        sceneGroup:insert( btnHit )
+        sceneGroup:insert( title )
+        --sceneGroup:insert( btnHit )
 
     end 
 end

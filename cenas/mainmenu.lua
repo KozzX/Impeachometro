@@ -7,7 +7,7 @@
 local sceneName = ...
 
 local composer = require( "composer" )
-local Botao = require( "Botao" )
+local Botao = require( "objetos.Botao" )
 
 
 -- Load scene with same root filename as this file
@@ -17,7 +17,7 @@ local btnPlay
 
 local function jogar( event )
 	btnPlay:removeEventListener( "tap", jogar )
-	composer.gotoScene( "escolher", "fade", 500 )  
+	composer.gotoScene( "cenas.escolher", "fade", 500 )  
 end
 
 
