@@ -8,6 +8,10 @@ local sceneName = ...
 
 local composer = require( "composer" )
 local Botao = require( "objetos.Botao" )
+local globals = require( "globals" )
+local coronium = require( "mod_coronium" )
+coronium:init({ appId = globals.appId, apiKey = globals.apiKey })
+coronium.showStatus = true
 
 
 -- Load scene with same root filename as this file
@@ -15,10 +19,14 @@ local scene = composer.newScene(  )
 
 local btnPlay
 
+local timerPercorre
+
 local function jogar( event )
 	btnPlay:removeEventListener( "tap", jogar )
 	composer.gotoScene( "cenas.escolher", "fade", 500 )  
 end
+
+
 
 
 ---------------------------------------------------------------------------------
@@ -26,19 +34,20 @@ end
 function scene:create( event )
     local sceneGroup = self.view
 
+
  
 end
 
 function scene:show( event )
     local sceneGroup = self.view
     local phase = event.phase
+    
 
     if phase == "will" then
-    	btnPlay = Botao.new("Play", 20)
-    	title = display.newText( "IMPEACHOMETRO", display.contentCenterX, display.contentHeight / 25 * 2.5, native.systemFontBold, 40)
+        timerPercorre = timer.performWithDelay( 100, globals.percorrer ,-1 )
+    	btnPlay = Botao.new("Jogar", 40)
+    	title = display.newText( "IMPEACHOMETRO", display.contentCenterX, display.contentHeight / 100 * 30, globals.fonts[2], 40)
     	title:setFillColor( 0,0,0 )
-       
-        
 
     elseif phase == "did" then
         local prevScene = composer.getSceneName( "previous" )
@@ -61,7 +70,7 @@ function scene:hide( event )
         --
         -- INSERT code here to pause the scene
         -- e.g. stop timers, stop animation, unload sounds, etc.)
-		
+		timer.cancel( timerPercorre )
         
 
     elseif phase == "did" then

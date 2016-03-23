@@ -1,4 +1,5 @@
 local widget = require( "widget" )
+local globals = require( "globals" )
 
 local function new( texto,y )
 	local options = {
@@ -7,16 +8,16 @@ local function new( texto,y )
 		width=display.contentWidth / 100 * 60,
 		height=display.contentHeight / 100 * 7,
 		label=texto,
-		labelColor = { default={0.3,0.3,0.3}, over={0,0,0} },
+		labelColor = { default={0,0,0}, over={0,0,0} },
 		emboss=true,
 		fontSize=35,
 		labelAlign="center",
-		font=native.systemFont,
+		font=globals.fonts[2],
 		shape="rect",
 		cornerRadius=10,
 		fillColor = { default={1,1,1}, over={0.3,0.3,0.3} },
-		--strokeColor = { default={0,0,0}, over={0,0,0} },
-		--strokeWidth = 3
+		strokeColor = { default={0,0,0}, over={0,0,0} },
+		strokeWidth = 4
 	}
 	local botao = widget.newButton( options )
 	botao:scale( 0, 0 )

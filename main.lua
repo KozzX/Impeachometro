@@ -34,12 +34,32 @@ end
 local OneSignal = require("plugin.OneSignal")
 OneSignal.Init("241065a8-da68-4c69-af71-988c0c080ef3", "186553540640", DidReceiveRemoteNotification)
 
+local globals = require( "globals" )
+local Hud = require( "objetos.Hud" )
+
+function IdsAvailable(userId, pushToken)
+    print("userId:" .. userId)
+    globals.player.pushId = userId
+    if (pushToken) then -- nil if there was a connection issue or on iOS notification permissions were not accepted.
+        print("pushToken:" .. pushToken)
+        globals.player.pushToken = pushToken 
+    end  
+end
+OneSignal.IdsAvailableCallback(IdsAvailable)
+
+
+
 
 local composer = require( "composer" )
+
+
+Hud.new()
 
 composer.gotoScene( "cenas.mainmenu", "crossFade", 500 )  
 
 display.setDefault( "background", 0.8,0.8,0.8 )
+
+
 
 
 

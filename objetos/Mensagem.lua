@@ -1,3 +1,5 @@
+local globals = require( "globals" )
+
 local grupo = display.newGroup( )
 local janela
 local txt1
@@ -8,10 +10,12 @@ local txt4
 local function new( lado )
 	
 	janela = display.newRoundedRect( display.contentCenterX, display.contentCenterY, display.contentCenterY, display.contentCenterY/1.5, 10 )
-	txt1 = display.newText( "Vote à favor do", display.contentCenterX, janela.y-(janela.width/4), native.systemFontBold, 30)
-	txt2 = display.newText( "Impeachment clicando", display.contentCenterX, janela.y-(janela.width/4)+30, native.systemFontBold, 30)
-	txt3 = display.newText( "na tela até o ponteiro", display.contentCenterX, janela.y-(janela.width/4)+60, native.systemFontBold, 30)
-	txt4 = display.newText( "chegar no azul.", display.contentCenterX, janela.y-(janela.width/4)+90, native.systemFontBold, 30)
+	janela.stroke = {0,0,0}
+	janela.strokeWidth = 4
+	txt1 = display.newText( "Vote à favor do", display.contentCenterX, janela.y-(janela.width/4), globals.fonts[2], 30)
+	txt2 = display.newText( "Impeachment clicando", display.contentCenterX, janela.y-(janela.width/4)+30, globals.fonts[2], 30)
+	txt3 = display.newText( "na tela até o ponteiro", display.contentCenterX, janela.y-(janela.width/4)+60, globals.fonts[2], 30)
+	txt4 = display.newText( "passar do cubo azul.", display.contentCenterX, janela.y-(janela.width/4)+90, globals.fonts[2], 30)
 	txt1:setFillColor( 0,0,0 )
 	txt2:setFillColor( 0,0,0 )
 	txt3:setFillColor( 0,0,0 )
@@ -48,12 +52,15 @@ local function remover(  )
 	
 end
 
-local function newPlusOne(  )
+local function newPlusOne( lado )
 	local x = math.random( display.contentCenterX/3,display.contentWidth - display.contentCenterX/3 )
 	local y = math.random( display.contentCenterY/3,display.contentHeight - display.contentCenterY/3)
-	local plus = display.newText( "+1", x, y, native.systemFontBold, 50)
-	plus:setFillColor( 0,0.8,0 )
+	local plus = display.newText( "#Fica", x, y, globals.fonts[2], 50)
+	plus:setFillColor( 0,0,1)
 	plus.alpha = 0
+	if (lado == "fora") then
+		plus.text = "#Fora"
+	end
 	transition.to( plus, {alpha=1, y=plus.y - 30, time=400, onComplete=function (  )
 		transition.to( plus, {alpha=0, y=plus.y - 30, time=400, onComplete=function (  )
 			display.remove( plus )

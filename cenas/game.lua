@@ -11,6 +11,11 @@ local Botao = require( "objetos.Botao" )
 local Objetos = require( "objetos.Objetos" )
 local Mensagem = require ("objetos.Mensagem")
 local Resultado = require ("objetos.Resultado")
+local globals = require( "globals" )
+
+local coronium = require( "mod_coronium" )
+coronium:init({ appId = globals.appId, apiKey = globals.apiKey })
+coronium.showStatus = true
 
 
 local title
@@ -28,8 +33,9 @@ local metaSpeed = -0.5
 local actSpeed = metaSpeed
 local ativo = true
 local btnProx
+local btnRecomecar
+local lado
 
-local hit
 local listener
 
 
@@ -38,43 +44,75 @@ local listener
 -- Load scene with same root filename as this file
 local scene = composer.newScene(  )
 
+local function menu( event )
+    Runtime:removeEventListener("tap", menu)
+    Resultado.remover()
+    composer.gotoScene( "cenas.mainmenu", "fade", 500 )  
+    
+end
+
+
 local function proximo( event )
 	btnProx:removeEventListener( "tap", proximo )
 	display.remove( btnProx )
 	transition.to( ponteiro, {rotation=0, time=200} )
 	Resultado.remover()
+    globals.changeBackground(0)
+    fase.text = "Fase " .. numFase
+    metaSpeed = metaSpeed - 0.5
 
 	timer.performWithDelay( 1500, function (  )
-		fase.text = "Fase" .. numFase
-		metaSpeed = metaSpeed - 0.5
+		
 		ativo = true
-		Runtime:addEventListener( "tap", hit )
 		Runtime:addEventListener( "enterFrame", listener )
 	end , 1 )
-	
 end
 
 
 local function vitoria(  )
 	print( "vitoria" )
 	numFase = numFase + 1
-	Resultado.new(fase.text)
+	Resultado.new({0,0.7,0.7},"VENCEU", "Parabéns","Você completou a", fase.text.."." )
 	timer.performWithDelay( 1000, function (  )
-		btnProx = Botao.new("Ir para Fase "..numFase, 60)
+		btnProx = Botao.new("Ir para Fase "..numFase, 56)
+        --btnMenu = Botao.new("Menu", 64)
 		btnProx:addEventListener( "tap", proximo )		
 	end , 1 )
-	
-	
+end
+
+local function recomecar( event )
+    btnRecomecar:removeEventListener( "tap", recomecar ) 
+    display.remove( btnRecomecar )
+    metaSpeed = -0.5
+    transition.to( ponteiro, {rotation=0, time=200} )
+    globals.changeBackground(0)
+    numFase = 1
+    pontos.text = 0
+    fase.text = "Fase "..numFase
+    Resultado.remover()
+    timer.performWithDelay( 1500, function (  )
+        ativo = true
+        Runtime:addEventListener( "enterFrame", listener )
+    end , 1 )
+    
 end
 
 local function derrota(  )
 	print( "derrota" )
+    Resultado.new({1,0.7,1},"PERDEU", "Resultados:","Pontos: "..pontos.text, fase.text )
+    timer.performWithDelay( 1000, function (  )
+        btnRecomecar = Botao.new("Recomeçar", 56)
+        --btnMenu = Botao.new("Menu", 64)
+        --btnMenu:addEventListener( "tap", menu )
+        btnRecomecar:addEventListener( "tap", recomecar )      
+    end , 1 )
 	
 end
 
 
 function listener( event )
     ponteiro:rotate( actSpeed )
+    globals.changeBackground(ponteiro.rotation)
 
     if (ponteiro.rotation <= minRot) then
         actSpeed = 0
@@ -96,13 +134,14 @@ local function infla(  )
     end} )
 end
 
-function hit( event )
-    actSpeed = (metaSpeed*(-1))+1
+local function hit( event )
+    actSpeed = 4--(metaSpeed*(-1))+0.8
     timer.performWithDelay( 50, function (  )
         actSpeed = metaSpeed
         if (ativo == true) then
         	pontos.text = pontos.text + (1)
-        	Mensagem.newPlusOne()
+        	Mensagem.newPlusOne(lado)
+            coronium:run( "insereVoto", globals.player )
             infla()  
         end
     end ,1 )
@@ -130,21 +169,30 @@ function scene:show( event )
     local sceneGroup = self.view
     local phase = event.phase
     local extras = event.params
+    lado = extras.lado
 
 
     if phase == "will" then
+        local hudGrupo = display.newGroup( )
     	if (extras.lado == "fica") then
-    		title = display.newText( "#Fica", display.contentCenterX, display.contentHeight/100*5, native.systemFontBold, 40)
-    		
+    		title = display.newText( "#Fica", display.contentCenterX, display.contentHeight/100*95, globals.fonts[2], 30)
+    		globals.player.voto = "#Fica"
     	elseif (extras.lado == "fora") then
-    		title = display.newText( "#Fora", display.contentCenterX, display.contentHeight/100*5, native.systemFontBold, 40)
+    		title = display.newText( "#Fora", display.contentCenterX, display.contentHeight/100*95, globals.fonts[2], 30)
+            globals.player.voto = "#Fora"
     	end
+
     	title:setFillColor( 0,0,0 )
-    	fase = display.newText( "Fase "..numFase, display.contentCenterX, display.contentHeight/100*10, native.systemFontBold, 40)
+    	fase = display.newText( "Fase "..numFase, display.contentCenterX, display.contentHeight/100*5, globals.fonts[2], 30)
     	fase:setFillColor( 0,0,0 )
-    	pontos = display.newText( "0", display.contentCenterX, display.contentHeight/100*15, native.systemFontBold, 40)
+    	pontos = display.newText( "0", display.contentCenterX, display.contentHeight/100*10, globals.fonts[2], 40)
     	pontos:setFillColor( 0,0,0 )
     	pontos.text = 0
+        hudGrupo:insert( title )
+        hudGrupo:insert( fase )
+        hudGrupo:insert( pontos )
+        hudGrupo.alpha = 0
+        transition.to( hudGrupo, {alpha=1,time=500} )
         
 
     elseif phase == "did" then

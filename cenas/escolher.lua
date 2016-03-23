@@ -8,6 +8,7 @@ local sceneName = ...
 
 local composer = require( "composer" )
 local Botao = require( "objetos.Botao" )
+local globals = require( "globals" )
 
 
 -- Load scene with same root filename as this file
@@ -19,6 +20,11 @@ local foraDilma
 local txtFica
 local txtFora
 local txtPergunta
+
+
+local timerPercorre
+
+
 
 local function jogar( event )
 	btnPlay:removeEventListener( "tap", jogar )
@@ -65,8 +71,9 @@ function scene:show( event )
     local phase = event.phase
 
     if phase == "will" then
+        timerPercorre = timer.performWithDelay( 100, globals.percorrer ,-1 )
     	
-    	txtPergunta = display.newText( "Escolha seu lado", display.contentCenterX, display.contentHeight/100*20, native.systemFontBold, 40)
+    	txtPergunta = display.newText( "Escolha seu lado", display.contentCenterX, display.contentHeight/100*20, globals.fonts[2], 40)
     	txtPergunta:setFillColor( 0,0,0 )
 
 
@@ -75,7 +82,7 @@ function scene:show( event )
         ficaDilma.x = display.contentCenterX + display.contentCenterX/2
         ficaDilma.y = display.contentCenterY/1.1
 
-        txtFica = display.newText( "#Fica", ficaDilma.x, ficaDilma.y + 150, native.systemFontBold, 40)
+        txtFica = display.newText( "#Fica", ficaDilma.x, ficaDilma.y + 150, globals.fonts[2], 40)
         txtFica:setFillColor( 0,0,0 )
 
         foraDilma = display.newImage( "imagens/foradilma.png" )
@@ -83,7 +90,7 @@ function scene:show( event )
         foraDilma.x = display.contentCenterX/2
         foraDilma.y = display.contentCenterY/1.1
 
-        txtFora = display.newText( "#Fora", foraDilma.x, foraDilma.y + 150, native.systemFontBold, 40)
+        txtFora = display.newText( "#Fora", foraDilma.x, foraDilma.y + 150, globals.fonts[2], 40)
         txtFora:setFillColor( 0,0,0 )
 
         
@@ -115,6 +122,7 @@ function scene:hide( event )
         --
         -- INSERT code here to pause the scene
         -- e.g. stop timers, stop animation, unload sounds, etc.)
+        timer.cancel( timerPercorre )
 		
         
 
