@@ -73,24 +73,24 @@ function scene:show( event )
     if phase == "will" then
         timerPercorre = timer.performWithDelay( 100, globals.percorrer ,-1 )
     	
-    	txtPergunta = display.newText( "Escolha seu lado", display.contentCenterX, display.contentHeight/100*20, globals.fonts[2], 40)
+    	txtPergunta = display.newText( "Escolha seu lado", display.contentCenterX, display.contentHeight/100*30, globals.fonts[2], 40)
     	txtPergunta:setFillColor( 0,0,0 )
 
 
     	ficaDilma = display.newImage( "imagens/dilma.png" )
         ficaDilma:scale( 0.16, 0.16)
         ficaDilma.x = display.contentCenterX + display.contentCenterX/2
-        ficaDilma.y = display.contentCenterY/1.1
+        ficaDilma.y = display.contentCenterY/1
 
-        txtFica = display.newText( "#Fica", ficaDilma.x, ficaDilma.y + 150, globals.fonts[2], 40)
+        txtFica = display.newText( "#Fica", ficaDilma.x, ficaDilma.y + 180, globals.fonts[2], 40)
         txtFica:setFillColor( 0,0,0 )
 
         foraDilma = display.newImage( "imagens/foradilma.png" )
         foraDilma:scale( 0.8, 0.8)
         foraDilma.x = display.contentCenterX/2
-        foraDilma.y = display.contentCenterY/1.1
+        foraDilma.y = display.contentCenterY/1
 
-        txtFora = display.newText( "#Fora", foraDilma.x, foraDilma.y + 150, globals.fonts[2], 40)
+        txtFora = display.newText( "#Fora", foraDilma.x, foraDilma.y + 180, globals.fonts[2], 40)
         txtFora:setFillColor( 0,0,0 )
 
         
