@@ -19,11 +19,16 @@ local scene = composer.newScene(  )
 
 local btnPlay
 local btnRank
+local btnAchieve
 
 local timerPercorre
 
 local function rank( event )
     showLeaderboards() 
+end
+
+local function achieve( event )
+    showAchievements()
 end
 
 local function jogar( event )
@@ -52,6 +57,7 @@ function scene:show( event )
         timerPercorre = timer.performWithDelay( 100, globals.percorrer ,-1 )
     	btnPlay = Botao.new("Jogar", 40)
         btnRank = Botao.new("Ranking", 50)
+        btnAchieve = Botao.new("Conquistas", 60)
     	title = display.newText( "IMPEACHOMETRO", display.contentCenterX, display.contentHeight / 100 * 30, globals.fonts[2], 40)
     	title:setFillColor( 0,0,0 )
         loadInter()
@@ -69,8 +75,10 @@ function scene:show( event )
         end
         btnPlay:addEventListener( "tap", jogar )
         btnRank:addEventListener( "tap", rank )
+        btnAchieve:addEventListener( "tap", achieve )
         sceneGroup:insert( btnPlay )
         sceneGroup:insert( btnRank )
+        sceneGroup:insert( btnAchieve )
         sceneGroup:insert( title )
 
     end 

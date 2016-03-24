@@ -45,6 +45,7 @@ local listener
 -- Load scene with same root filename as this file
 local scene = composer.newScene(  )
 
+
 local function menu( event )
     btnMenu:removeEventListener( "tap", menu )
     --btnRecomecar:removeEventListener( "tap", recomecar )

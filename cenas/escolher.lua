@@ -75,7 +75,6 @@ function scene:show( event )
 
     if phase == "will" then
 
-        showBanner()
         timerPercorre = timer.performWithDelay( 100, globals.percorrer ,-1 )
     	
     	txtPergunta = display.newText( "Escolha seu lado", display.contentCenterX, display.contentHeight/100*30, globals.fonts[2], 40)
