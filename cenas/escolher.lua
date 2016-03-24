@@ -106,7 +106,7 @@ function scene:show( event )
             composer.removeScene( prevScene )
         end
 
-        btnVoltar = Botao.new("Voltar", 90)
+        btnVoltar = Botao.new("Voltar", 85)
         
         ficaDilma:addEventListener( "tap", fica )
         foraDilma:addEventListener( "tap", fora )

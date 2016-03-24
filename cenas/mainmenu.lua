@@ -34,10 +34,6 @@ local function jogar( event )
 end
 
 
-
-
-
-
 ---------------------------------------------------------------------------------
 
 function scene:create( event )
