@@ -52,6 +52,18 @@ OneSignal.IdsAvailableCallback(IdsAvailable)
 
 local composer = require( "composer" )
 
+--Carregando Audios
+for i=1,#globals.loadAudio do
+    globals.audios[i] = audio.loadSound(globals.loadAudio[i])
+end
+globals.point = audio.loadSound( globals.loadPoint )
+globals.beep = audio.loadSound( globals.loadBeep )
+audio.setVolume( 1, { channel=1 } )
+for i=2,32 do
+    audio.setVolume( 0.1, { channel=i } )    
+end
+audio.reserveChannels( 2 )
+
 
 Hud.new()
 

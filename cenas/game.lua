@@ -71,6 +71,12 @@ end
 
 local function vitoria(  )
 	print( "vitoria" )
+    audio.stop( 1 )
+    if (lado == "fica") then
+        audio.play( globals.audios[4] ,{channel = 1} )        
+    else        
+        audio.play( globals.audios[math.random(1,#globals.audios)] ,{channel = 1} )
+    end
 	numFase = numFase + 1
 	Resultado.new({0,0.7,0.7},"VENCEU", "Parabéns","Você completou a", fase.text.."." )
 	timer.performWithDelay( 1000, function (  )
@@ -99,6 +105,12 @@ end
 
 local function derrota(  )
 	print( "derrota" )
+    audio.stop( 1 )
+    if (lado == "fica") then
+        audio.play( globals.audios[math.random(1,#globals.audios)] ,{channel = 1} )
+    else
+        audio.play( globals.audios[4] ,{channel = 1} )
+    end
     Resultado.new({1,0.7,1},"PERDEU", "Resultados:","Pontos: "..pontos.text, fase.text )
     timer.performWithDelay( 1000, function (  )
         btnRecomecar = Botao.new("Recomeçar", 56)
@@ -141,6 +153,8 @@ local function hit( event )
         if (ativo == true) then
         	pontos.text = pontos.text + (1)
         	Mensagem.newPlusOne(lado)
+            audio.play( globals.audios[math.random(1,#globals.audios)],{channel = 1} )
+            audio.play( globals.beep )
             coronium:run( "insereVoto", globals.player )
             infla()  
         end

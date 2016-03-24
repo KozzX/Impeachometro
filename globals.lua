@@ -14,6 +14,23 @@ local globals =
 		"royal-serif.ttf",
 		"agoestoesan.ttf",
 	},
+    loadAudio = {
+        "audio/ambiente.wav",
+        "audio/coff.wav",
+        "audio/engasguei.wav",
+        "audio/golpe.wav",
+        "audio/porta.wav",
+        "audio/sapiens.wav",
+        "audio/neymar.wav",
+        "audio/ganhar.wav",
+        "audio/mosquito.wav",
+    },
+    audios = {},
+    loadPoint = "audio/Point.wav",
+    point = {},
+    loadBeep = "audio/beep.wav",
+    beep = {},
+
 	
 }
 

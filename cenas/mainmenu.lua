@@ -23,6 +23,7 @@ local timerPercorre
 
 local function jogar( event )
 	btnPlay:removeEventListener( "tap", jogar )
+    audio.play( globals.beep ,{channel = 3} ) 
 	composer.gotoScene( "cenas.escolher", "fade", 500 )  
 end
 
@@ -48,6 +49,10 @@ function scene:show( event )
     	btnPlay = Botao.new("Jogar", 40)
     	title = display.newText( "IMPEACHOMETRO", display.contentCenterX, display.contentHeight / 100 * 30, globals.fonts[2], 40)
     	title:setFillColor( 0,0,0 )
+
+
+
+        
 
     elseif phase == "did" then
         local prevScene = composer.getSceneName( "previous" )

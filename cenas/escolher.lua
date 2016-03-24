@@ -33,6 +33,7 @@ end
 
 local function fica( event )
 	ficaDilma:removeEventListener( "tap", fica )
+    audio.play( globals.beep ,{channel = 3} ) 
 	print( "fica" )
 	transition.to( foraDilma, {alpha=0, time=200} )
 	transition.to( txtFica, {alpha=0, time=200} )
@@ -46,6 +47,7 @@ end
 
 local function fora( event )
     foraDilma:removeEventListener( "tap", fora )
+    audio.play( globals.beep ,{channel = 3} ) 
 	print( "fora" )
 	transition.to( ficaDilma, {alpha=0, time=200} )
 	transition.to( txtFica, {alpha=0, time=200} )
