@@ -15,7 +15,7 @@ local globals = require( "globals" )
 
 local coronium = require( "mod_coronium" )
 coronium:init({ appId = globals.appId, apiKey = globals.apiKey })
-coronium.showStatus = true
+coronium.showStatus = false
 
 
 local title
@@ -34,6 +34,7 @@ local actSpeed = metaSpeed
 local ativo = true
 local btnProx
 local btnRecomecar
+local btnMenu
 local lado
 
 local listener
@@ -45,7 +46,12 @@ local listener
 local scene = composer.newScene(  )
 
 local function menu( event )
-    Runtime:removeEventListener("tap", menu)
+    btnMenu:removeEventListener( "tap", menu )
+    --btnRecomecar:removeEventListener( "tap", recomecar )
+    display.remove(btnRecomecar)
+    btnRecomecar = nil
+    display.remove( btnMenu )
+    btnMenu = nil
     Resultado.remover()
     composer.gotoScene( "cenas.mainmenu", "fade", 500 )  
     
@@ -72,6 +78,10 @@ end
 local function vitoria(  )
 	print( "vitoria" )
     audio.stop( 1 )
+    submitScore(IDLEADERBOARDS.fases,numFase)  
+    submitScore(IDLEADERBOARDS.pontos,tonumber(pontos.text))
+    submeterPontos("FASE",numFase)
+    submeterPontos("PONTOS",tonumber(pontos.text))
     if (lado == "fica") then
         audio.play( globals.audios[4] ,{channel = 1} )        
     else        
@@ -80,14 +90,17 @@ local function vitoria(  )
 	numFase = numFase + 1
 	Resultado.new({0,0.7,0.7},"VENCEU", "Parabéns","Você completou a", fase.text.."." )
 	timer.performWithDelay( 1000, function (  )
-		btnProx = Botao.new("Ir para Fase "..numFase, 56)
+		btnProx = Botao.new("Ir para Fase "..numFase, 68)
         --btnMenu = Botao.new("Menu", 64)
 		btnProx:addEventListener( "tap", proximo )		
 	end , 1 )
 end
 
 local function recomecar( event )
+    print( "RECOMECAR" )
     btnRecomecar:removeEventListener( "tap", recomecar ) 
+    btnMenu:removeEventListener( "tap", menu ) 
+    display.remove(btnMenu)
     display.remove( btnRecomecar )
     metaSpeed = -0.5
     transition.to( ponteiro, {rotation=0, time=200} )
@@ -106,16 +119,21 @@ end
 local function derrota(  )
 	print( "derrota" )
     audio.stop( 1 )
+    submitScore(IDLEADERBOARDS.fases,numFase)  
+    submitScore(IDLEADERBOARDS.pontos,tonumber(pontos.text))
+    submeterPontos("FASE",numFase)
+    submeterPontos("PONTOS",tonumber(pontos.text))
+    
     if (lado == "fica") then
         audio.play( globals.audios[math.random(1,#globals.audios)] ,{channel = 1} )
     else
         audio.play( globals.audios[4] ,{channel = 1} )
     end
-    Resultado.new({1,0.7,1},"PERDEU", "Resultados:","Pontos: "..pontos.text, fase.text )
+    Resultado.new({1,0.7,1},"PERDEU", "Resultados:","Pontos: "..pontos.text, "Melhor: " .. buscarPontos("PONTOS").highScore , "Total Pontos: ".. buscarPontos("PONTOS").totalScore,"Fase: " .. numFase," Melhor Fase: " .. buscarPontos("FASE").highScore)
     timer.performWithDelay( 1000, function (  )
         btnRecomecar = Botao.new("Recomeçar", 56)
-        --btnMenu = Botao.new("Menu", 64)
-        --btnMenu:addEventListener( "tap", menu )
+        btnMenu = Botao.new("Menu", 64)
+        btnMenu:addEventListener( "tap", menu )
         btnRecomecar:addEventListener( "tap", recomecar )      
     end , 1 )
 	
@@ -129,11 +147,13 @@ function listener( event )
     if (ponteiro.rotation <= minRot) then
         actSpeed = 0
         ativo = false
+        globals.inGame = false
         Runtime:removeEventListener( "enterFrame", listener )
         derrota()
     elseif (ponteiro.rotation >= maxRot) then
         actSpeed = 0
         ativo = false
+        globals.inGame = false
         Runtime:removeEventListener( "enterFrame", listener )
         vitoria()
     end
@@ -165,6 +185,7 @@ local function comecar( event )
 	display.remove(btnOk)
 	btnOk:removeEventListener( "tap", comecar )
 	Mensagem.remover()
+    globals.inGame = true
 	timer.performWithDelay( 500, function (  )
 		Runtime:addEventListener( "tap", hit )
 		Runtime:addEventListener( "enterFrame", listener )	
@@ -212,6 +233,7 @@ function scene:show( event )
     elseif phase == "did" then
         local prevScene = composer.getSceneName( "previous" )
         if (prevScene) then
+            print( "removeu" )
             composer.removeScene( prevScene )
         end
         dilma = Objetos.newDilma()
@@ -221,13 +243,14 @@ function scene:show( event )
         btnOk = Botao.new("Começar", 60)
 
         btnOk:addEventListener( "tap", comecar )
-        
 
         sceneGroup:insert( dilma )
         sceneGroup:insert( roda )
         sceneGroup:insert( ponteiro )
         sceneGroup:insert( title )
-        --sceneGroup:insert( btnHit )
+        sceneGroup:insert( fase )
+        sceneGroup:insert( title )
+        sceneGroup:insert( pontos )
 
     end 
 end

@@ -14,34 +14,38 @@ settings =
 		default = "portrait",
 		supported = { "portrait", }
 	},
+	android =
+	{
+		googlePlayGamesAppId = "186553540640",
+		usesPermissions =
+		{
+			"android.permission.INTERNET",
+			"com.android.vending.BILLING",
+			"android.permission.ACCESS_NETWORK_STATE",
+		},
+	},
 	plugins =
     {
-        ["plugin.facebook.v4"] =
-        {
-            publisherId = "com.coronalabs"
-        },
+    	["CoronaProvider.gameNetwork.google"] =
+		{
+			-- required
+			publisherId = "com.coronalabs",
+			supportedPlatforms = { android = true }
+		},
         ["plugin.OneSignal"] =
     	{
         	publisherId = "com.onesignal",
-    	},
-    	["plugin.google.play.services"] =
-    	{
-            publisherId = "com.coronalabs",
-            supportedPlatforms = { android=true, ["android-kindle"]=true },
     	},
     	["plugin.google.iap.v3"] =
         {
             publisherId = "com.coronalabs",
             supportedPlatforms = { android=true }
         },
-        ['plugin.toast'] = 
-        {
-        	publisherId = 'com.spiralcodestudio'
-        },
-        ["plugin.mwc"] = 
-        { 
-        	publisherId = "com.xibalbastudios" 
-        },
+        ["plugin.google.play.services"] =
+    	{
+            publisherId = "com.coronalabs",
+            supportedPlatforms = { android=true, ["android-kindle"]=true },
+    	},
 
     },
 	
@@ -102,11 +106,5 @@ settings =
 	--
 	-- Android Section
 	--
-	android =
-	{
-		usesPermissions =
-		{
-			"android.permission.INTERNET",
-		},
-	},
+	
 }

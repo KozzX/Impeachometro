@@ -14,7 +14,7 @@ local globals = require( "globals" )
 -- Load scene with same root filename as this file
 local scene = composer.newScene(  )
 
-local btnPlay
+local btnVoltar
 local ficaDilma
 local foraDilma
 local txtFica
@@ -24,12 +24,6 @@ local txtPergunta
 
 local timerPercorre
 
-
-
-local function jogar( event )
-	btnPlay:removeEventListener( "tap", jogar )
-	composer.gotoScene( "cenas.game", "fade", 500 )  
-end
 
 local function fica( event )
 	ficaDilma:removeEventListener( "tap", fica )
@@ -59,6 +53,13 @@ local function fora( event )
 	
 end
 
+local function voltar( event )
+    btnVoltar:removeEventListener( "tap", voltar )
+    ficaDilma:removeEventListener( "tap", fica )
+    foraDilma:removeEventListener( "tap", fora )
+    composer.gotoScene( "cenas.mainmenu", "fade", 500 )  
+end
+
 
 ---------------------------------------------------------------------------------
 
@@ -73,6 +74,8 @@ function scene:show( event )
     local phase = event.phase
 
     if phase == "will" then
+
+        showBanner()
         timerPercorre = timer.performWithDelay( 100, globals.percorrer ,-1 )
     	
     	txtPergunta = display.newText( "Escolha seu lado", display.contentCenterX, display.contentHeight/100*30, globals.fonts[2], 40)
@@ -102,15 +105,19 @@ function scene:show( event )
         if (prevScene) then
             composer.removeScene( prevScene )
         end
+
+        btnVoltar = Botao.new("Voltar", 90)
         
         ficaDilma:addEventListener( "tap", fica )
         foraDilma:addEventListener( "tap", fora )
+        btnVoltar:addEventListener( "tap", voltar )
                
         sceneGroup:insert( txtPergunta )
         sceneGroup:insert( ficaDilma )
         sceneGroup:insert( txtFica )
         sceneGroup:insert( foraDilma )
         sceneGroup:insert( txtFora )
+        sceneGroup:insert( btnVoltar )
 
     end 
 end

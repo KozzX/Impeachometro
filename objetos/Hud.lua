@@ -2,7 +2,7 @@ local globals = require( "globals" )
 local coronium = require( "mod_coronium" )
 
 coronium:init({ appId = globals.appId, apiKey = globals.apiKey })
-coronium.showStatus = true
+coronium.showStatus = false
 
 local textFora
 local textFica
@@ -10,25 +10,42 @@ local barraFora
 local barraFica
 local valorFora = 0
 local valorFica = 0
+local contFica = 1
+local contFora = 1
 
 local function percentual(  )
-	print( "percentual" )
-	transition.to( barraFica, {width=display.contentWidth/100 * (valorFica * 100 / (valorFica + valorFora)), time=200} )
-	transition.to( barraFora, {width=display.contentWidth/100 * (valorFora * 100 / (valorFica + valorFora)), time=200} )
+	transition.to( barraFica, {width=display.contentWidth/100 * (valorFica * 100 / (valorFica + valorFora)), time=300} )
+	transition.to( barraFora, {width=display.contentWidth/100 * (valorFora * 100 / (valorFica + valorFora)), time=300} )
 end
 
 local function contaFica( event )
-    print( event.result[1]["count(voto)"])
     valorFica = event.result[1]["count(voto)"]
+    if ((contFica == 1) or (contFica%10 == 0)) and (globals.inGame == false) then
+    	submeterPontos("FICA",tonumber(valorFica))	
+    end    
     textFica.text = "#Fica: "..valorFica
-    percentual()    
+    percentual()  
+    contFica = contFica + 1  
 end
 
 local function contaFora( event )
-    print( event.result[1]["count(voto)"]) 
     valorFora = event.result[1]["count(voto)"]
+    if ((contFora == 1) or (contFora%10 == 0)) and (globals.inGame == false) then
+    	submeterPontos("FORA",tonumber(valorFora))
+	end
     textFora.text = "#Fora: "..valorFora
-    percentual()
+    coronium:run( "contaFica",{},contaFica)
+    contFora = contFora + 1
+end
+
+local function selecionar(  )
+	if (buscarPontos("FICA").lastScore > 0) and (buscarPontos("FORA").lastScore > 0) then
+		valorFica = buscarPontos("FICA").lastScore
+		valorFora = buscarPontos("FORA").lastScore
+		textFica.text = "#Fica: "..valorFica
+		textFora.text = "#Fora: "..valorFora
+		percentual()
+	end
 end
 
 local function new(  )
@@ -51,10 +68,9 @@ local function new(  )
 	textFica = display.newText( "#Fica: 0", display.contentWidth, 130, globals.fonts[2], 30)
 	textFica.anchorX = 1
 	textFica:setFillColor( 0,0,0 )
-
+	selecionar()
 	timer.performWithDelay( 2000, function (  )
-		coronium:run( "contaFica",{},contaFica)
-    	coronium:run( "contaFora",{},contaFora)		
+		coronium:run( "contaFora",{},contaFora)   			
 	end ,-1 )
 	
 end

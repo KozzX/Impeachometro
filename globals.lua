@@ -30,6 +30,7 @@ local globals =
     point = {},
     loadBeep = "audio/beep.wav",
     beep = {},
+    inGame = false
 
 	
 }

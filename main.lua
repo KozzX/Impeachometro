@@ -20,7 +20,7 @@ function DidReceiveRemoteNotification(message, additionalData, isActive)
                 system.openURL("http://www.facebook.com/opressoroculos")
             end
         elseif (additionalData.update) then   
-            system.openURL("https://play.google.com/store/apps/details?id=com.athgames.impeachometro")
+            system.openURL("https://play.google.com/store/apps/details?id=com.athgames.Impeachometro")
         elseif(additionalData.oculos) then
             system.openURL("https://play.google.com/store/apps/details?id=com.athgames.oculosopressor")
         elseif(additionalData.minigame) then
@@ -51,6 +51,17 @@ OneSignal.IdsAvailableCallback(IdsAvailable)
 
 
 local composer = require( "composer" )
+local Database = require ("utils.Database")
+local Google = require( "utils.Google" )
+local Admob = require( "utils.Admob" )
+
+propaganda = true
+
+init()
+
+gameNetworkSetup()
+
+Hud.new()
 
 --Carregando Audios
 for i=1,#globals.loadAudio do
@@ -65,7 +76,7 @@ end
 audio.reserveChannels( 2 )
 
 
-Hud.new()
+
 
 composer.gotoScene( "cenas.mainmenu", "crossFade", 500 )  
 

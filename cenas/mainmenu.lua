@@ -18,14 +18,22 @@ coronium.showStatus = true
 local scene = composer.newScene(  )
 
 local btnPlay
+local btnRank
 
 local timerPercorre
 
+local function rank( event )
+    showLeaderboards() 
+end
+
 local function jogar( event )
 	btnPlay:removeEventListener( "tap", jogar )
+    btnRank:removeEventListener( "tap", rank )
     audio.play( globals.beep ,{channel = 3} ) 
 	composer.gotoScene( "cenas.escolher", "fade", 500 )  
 end
+
+
 
 
 
@@ -47,8 +55,12 @@ function scene:show( event )
     if phase == "will" then
         timerPercorre = timer.performWithDelay( 100, globals.percorrer ,-1 )
     	btnPlay = Botao.new("Jogar", 40)
+        btnRank = Botao.new("Ranking", 50)
     	title = display.newText( "IMPEACHOMETRO", display.contentCenterX, display.contentHeight / 100 * 30, globals.fonts[2], 40)
     	title:setFillColor( 0,0,0 )
+        loadInter()
+        showBanner()
+
 
 
 
@@ -60,7 +72,9 @@ function scene:show( event )
             composer.removeScene( prevScene )
         end
         btnPlay:addEventListener( "tap", jogar )
+        btnRank:addEventListener( "tap", rank )
         sceneGroup:insert( btnPlay )
+        sceneGroup:insert( btnRank )
         sceneGroup:insert( title )
 
     end 
