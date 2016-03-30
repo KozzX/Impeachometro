@@ -54,6 +54,7 @@ local function fora( event )
 end
 
 local function voltar( event )
+	audio.play( globals.beep  ) 
     btnVoltar:removeEventListener( "tap", voltar )
     ficaDilma:removeEventListener( "tap", fica )
     foraDilma:removeEventListener( "tap", fora )

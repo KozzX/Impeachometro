@@ -5,6 +5,8 @@ IDLEADERBOARDS = {
   	pontos="CgkIoMDU-7YFEAIQAA",
 }
 
+
+
 function loginGooglePlayCallback( event )
 	if event.isError then 
 		native.showAlert( "Error", "Unable to connect to Google Play Services. Please check you internet connection and try again.", { 'Ok' } )		
@@ -34,6 +36,11 @@ end
 function submitScore( leaderboard, pontos )	
 	gameNetwork.request( "setHighScore",{localPlayerScore = { category=leaderboard, value=pontos }})
 end
+
+function submitConquista( conquista )
+	gameNetwork.request( "unlockAchievement",{ achievement = { identifier = conquista } } )
+end
+
 
 function showLeaderboards()
 	gameNetwork.show("leaderboards") -- Shows all the leaderboards.

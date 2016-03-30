@@ -25,6 +25,8 @@ function DidReceiveRemoteNotification(message, additionalData, isActive)
             system.openURL("https://play.google.com/store/apps/details?id=com.athgames.oculosopressor")
         elseif(additionalData.minigame) then
             system.openURL("https://play.google.com/store/apps/details?id=com.athgames.minigameracer")
+        elseif(additionalData.todos) then
+            system.openURL("https://play.google.com/store/apps/details?id=com.athgames.minigameracer")
         end
     else
         native.showAlert("OneSignal Message", message, { "OK" } )
@@ -69,11 +71,18 @@ for i=1,#globals.loadAudio do
 end
 globals.point = audio.loadSound( globals.loadPoint )
 globals.beep = audio.loadSound( globals.loadBeep )
+globals.erro = audio.loadSound( globals.loadErro )
+globals.success = audio.loadSound( globals.loadSuccess )
 audio.setVolume( 1, { channel=1 } )
-for i=2,32 do
+audio.setVolume( 1, { channel=2 } )
+for i=3,32 do
     audio.setVolume( 0.1, { channel=i } )    
 end
 audio.reserveChannels( 2 )
+
+timer.performWithDelay( 1000, function (  )
+    audio.play( globals.audios[6] ,{channel = 1} )
+end , 1 )
 
 
 

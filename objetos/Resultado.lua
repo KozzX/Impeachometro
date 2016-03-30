@@ -34,16 +34,16 @@ local function new( cor,texto1, texto2, texto3, texto4, texto5, texto6, texto7 )
 		texto7 = ""
 	end
 	
-	janela = display.newRoundedRect( display.contentCenterX, display.contentCenterY, display.contentCenterY, display.contentCenterY/0.8, 10 )
+	janela = display.newRoundedRect( display.contentCenterX, display.contentCenterY+10, display.contentCenterY, display.contentCenterY/0.78, 10 )
 	janela.stroke = {0,0,0}
 	janela.strokeWidth = 4
-	txt1 = display.newText( texto1, display.contentCenterX, janela.y-(janela.width/2), globals.fonts[2], 40)
-	txt2 = display.newText( texto2, display.contentCenterX, janela.y-(janela.width/2)+40, globals.fonts[2], 30)
-	txt3 = display.newText( texto3, display.contentCenterX, janela.y-(janela.width/2)+80, globals.fonts[2], 30)
-	txt4 = display.newText( texto4, display.contentCenterX, janela.y-(janela.width/2)+110, globals.fonts[2], 30)
-	txt5 = display.newText( texto5, display.contentCenterX, janela.y-(janela.width/2)+140, globals.fonts[2], 30)
-	txt6 = display.newText( texto6, display.contentCenterX, janela.y-(janela.width/2)+170, globals.fonts[2], 30)
-	txt7 = display.newText( texto7, display.contentCenterX, janela.y-(janela.width/2)+200, globals.fonts[2], 30)
+	txt1 = display.newText( texto1, display.contentCenterX, janela.y-(janela.width/1.85), globals.fonts[2], 40)
+	txt2 = display.newText( texto2, display.contentCenterX, janela.y-(janela.width/1.85)+40, globals.fonts[2], 30)
+	txt3 = display.newText( texto3, display.contentCenterX, janela.y-(janela.width/1.85)+80, globals.fonts[2], 30)
+	txt4 = display.newText( texto4, display.contentCenterX, janela.y-(janela.width/1.85)+110, globals.fonts[2], 30)
+	txt5 = display.newText( texto5, display.contentCenterX, janela.y-(janela.width/1.85)+140, globals.fonts[2], 30)
+	txt6 = display.newText( texto6, display.contentCenterX, janela.y-(janela.width/1.85)+170, globals.fonts[2], 30)
+	txt7 = display.newText( texto7, display.contentCenterX, janela.y-(janela.width/1.85)+200, globals.fonts[2], 30)
 	
 	txt1:setFillColor( 1,1,0 )
 	txt2:setFillColor( 0,0,0 )

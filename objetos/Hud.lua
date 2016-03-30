@@ -62,10 +62,10 @@ local function new(  )
 	barraFica.stroke = {0,0,0}
 	barraFica.strokeWidth = 4
 
-	textFora = display.newText( "#Fora: 0", 0,130, globals.fonts[2], 30)
+	textFora = display.newText( "#Fora: 0", 0,130, globals.fonts[2], 18)
 	textFora.anchorX = 0
 	textFora:setFillColor( 0,0,0 )
-	textFica = display.newText( "#Fica: 0", display.contentWidth, 130, globals.fonts[2], 30)
+	textFica = display.newText( "#Fica: 0", display.contentWidth, 130, globals.fonts[2], 18)
 	textFica.anchorX = 1
 	textFica:setFillColor( 0,0,0 )
 	selecionar()
